@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/crypto_provider.dart';
-import '../widgets/crypto_tile.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -45,11 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Colors.redAccent,
-                      child: Text(
-                        crypto.symbol[0].toUpperCase(),
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: NetworkImage(crypto.imageUrl),
                     ),
                     title: Text(
                       crypto.name,
