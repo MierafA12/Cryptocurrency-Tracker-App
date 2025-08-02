@@ -1,74 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import '../providers/crypto_provider.dart';
+import '../widgets/crypto_tile.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<CryptoProvider>(context, listen: false).loadCrypto();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final cryptoProvider = Provider.of<CryptoProvider>(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF121212), 
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Title
-              Text(
-                'Track Cryptocurrency\nIn Real Time',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Subtitle
-              Text(
-                'Stay ahead with live market trends,\nprice updates, and coin details.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 40),
-
-              // Animation
-              Lottie.asset(
-                'assets/animations/crypto.json', // Place your animation here
-                height: 200,
-              ),
-              const SizedBox(height: 40),
-
-              // CTA Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text(
+          "Crypto Tracker",
+          style: TextStyle(color: Colors.redAccent),
+        ),
+        backgroundColor: Colors.grey[900],
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: cryptoProvider.isLoading
+          ? Center(child: CircularProgressIndicator(color: Colors.red))
+          : ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: cryptoProvider.cryptoList.length,
+              itemBuilder: (context, index) {
+                final crypto = cryptoProvider.cryptoList[index];
+                return Card(
+                  color: Colors.grey[850],
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.redAccent,
+                      child: Text(
+                        crypto.symbol[0].toUpperCase(),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    title: Text(
+                      crypto.name,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      crypto.symbol.toUpperCase(),
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    trailing: Text(
+                      '\$${crypto.currentPrice.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/home');
-                  },
-                  child: const Text(
-                    'Explore Coins',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+                );
+              },
+            ),
     );
   }
 }
