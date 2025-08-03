@@ -55,7 +55,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text('${widget.crypto.name} Details'),
         backgroundColor: Colors.black,
@@ -65,89 +65,80 @@ class _DetailScreenState extends State<DetailScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(widget.crypto.imageUrl),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundImage: NetworkImage(widget.crypto.imageUrl),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    widget.crypto.name,
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      widget.crypto.name,
-                      style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  Text(
+                    widget.crypto.symbol.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.redAccent,
                     ),
-                    Text(
-                      widget.crypto.symbol.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    '\$${widget.crypto.currentPrice.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.greenAccent,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '\$${widget.crypto.currentPrice.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.green,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const Text(
-                      '7-Day Price Chart',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    isLoading
-                        ? const CircularProgressIndicator()
-                        : SizedBox(
-                            height: 200,
-                            child: LineChart(
-                              LineChartData(
-                                titlesData: FlTitlesData(show: false),
-                                gridData: FlGridData(show: false),
-                                borderData: FlBorderData(show: false),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    spots: priceSpots,
-                                    isCurved: true,
-                                    color: Colors.deepPurple,
-                                    dotData: FlDotData(show: false),
-                                    belowBarData: BarAreaData(
-                                      show: true,
-                                      color: Colors.deepPurple.withOpacity(0.2),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                  ],
-                ),
+            const Text(
+              '7-Day Price Chart',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
+            const SizedBox(height: 16),
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : SizedBox(
+                    height: 200,
+                    child: LineChart(
+                      LineChartData(
+                        titlesData: FlTitlesData(show: false),
+                        gridData: FlGridData(show: false),
+                        borderData: FlBorderData(show: false),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: priceSpots,
+                            isCurved: true,
+                            color: Colors.redAccent,
+                            dotData: FlDotData(show: false),
+                            belowBarData: BarAreaData(
+                              show: true,
+                              color: Colors.redAccent.withOpacity(0.2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),
