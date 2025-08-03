@@ -59,7 +59,7 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: Text('${widget.crypto.name} Details'),
         backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+        foregroundColor: Colors.redAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
