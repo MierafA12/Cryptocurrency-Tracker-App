@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:fl_chart/fl_chart.dart';
 import '../models/crypto_model.dart';
 
@@ -37,7 +36,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
         final List<FlSpot> spots = prices.asMap().entries.map((entry) {
           final index = entry.key.toDouble();
-          final price = (entry.value[1] as num).toDouble(); // y = price
+          final price = (entry.value[1] as num).toDouble();
           return FlSpot(index, price);
         }).toList();
 
@@ -46,7 +45,7 @@ class _DetailScreenState extends State<DetailScreen> {
           isLoading = false;
         });
       } else {
-        throw Exception('Failed to load data');
+        throw Exception('Failed to load chart data');
       }
     } catch (e) {
       print('Error fetching data: $e');
@@ -56,74 +55,99 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text('${widget.crypto.name} Details',
-            style: TextStyle(color: Colors.redAccent)),
-        backgroundColor: Colors.grey[900],
-        iconTheme: IconThemeData(color: Colors.redAccent),
+        title: Text('${widget.crypto.name} Details'),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        padding: const EdgeInsets.all(16),
+        child: ListView(
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(widget.crypto.imageUrl),
-            ),
-            SizedBox(height: 20),
-            Text(
-              widget.crypto.name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              widget.crypto.symbol.toUpperCase(),
-              style: TextStyle(color: Colors.redAccent, fontSize: 18),
-            ),
-            SizedBox(height: 20),
-            Text(
-              '\$${widget.crypto.currentPrice.toStringAsFixed(2)}',
-              style: TextStyle(color: Colors.greenAccent, fontSize: 22),
-            ),
-            SizedBox(height: 40),
-            isLoading
-                ? CircularProgressIndicator(color: Colors.redAccent)
-                : Column(
-                    children: [
-                      Text(
-                        '7-Day Price Chart',
-                        style:
-                            TextStyle(color: Colors.white70, fontSize: 18),
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(widget.crypto.imageUrl),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      widget.crypto.name,
+                      style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(height: 12),
-                      SizedBox(
-                        height: 200,
-                        child: LineChart(
-                          LineChartData(
-                            titlesData: FlTitlesData(show: false),
-                            gridData: FlGridData(show: false),
-                            borderData: FlBorderData(show: false),
-                            lineBarsData: [
-                              LineChartBarData(
-                                spots: priceSpots,
-                                isCurved: true,
-                                color: Colors.redAccent,
-                                dotData: FlDotData(show: false),
-                                belowBarData: BarAreaData(
-                                  show: true,
-                                  color: Colors.redAccent.withOpacity(0.2),
-                                ),
+                    ),
+                    Text(
+                      widget.crypto.symbol.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '\$${widget.crypto.currentPrice.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.green,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Text(
+                      '7-Day Price Chart',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    isLoading
+                        ? const CircularProgressIndicator()
+                        : SizedBox(
+                            height: 200,
+                            child: LineChart(
+                              LineChartData(
+                                titlesData: FlTitlesData(show: false),
+                                gridData: FlGridData(show: false),
+                                borderData: FlBorderData(show: false),
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    spots: priceSpots,
+                                    isCurved: true,
+                                    color: Colors.deepPurple,
+                                    dotData: FlDotData(show: false),
+                                    belowBarData: BarAreaData(
+                                      show: true,
+                                      color: Colors.deepPurple.withOpacity(0.2),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
