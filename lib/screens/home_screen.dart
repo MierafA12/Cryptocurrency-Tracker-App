@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/crypto_provider.dart';
+import '../screens/detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -41,8 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+
                   ),
                   child: ListTile(
+                 onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(crypto: crypto),
+                        ),
+                      );
+                    },     
                     leading: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       backgroundImage: NetworkImage(crypto.imageUrl),
