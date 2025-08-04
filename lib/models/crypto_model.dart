@@ -12,6 +12,14 @@ class Crypto {
     required this.currentPrice,
     required this.imageUrl,
   });
+  
+   Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'symbol': symbol,
+        'currentPrice': currentPrice,
+        'imageUrl': imageUrl,
+      };
 
   factory Crypto.fromJson(Map<String, dynamic> json) {
     return Crypto(
