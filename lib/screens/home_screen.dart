@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/crypto_provider.dart';
 import '../screens/detail_screen.dart';
-import '../screens/wishlist_screen.dart'; // ✅ Import your Wishlist screen
+import '../screens/wishlist_screen.dart'; 
+import '../widgets/search_bar.dart'; // ✅ Fix missing semicolon
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,11 +12,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  TextEditingController searchController = TextEditingController();
+  List filteredList = [];
 
   @override
   void initState() {
     super.initState();
-    Provider.of<CryptoProvider>(context, listen: false).loadCrypto();
+    final provider = Provider.of<CryptoProvider>(context, listen: false);
+    provider.loadCrypto().then((_) {
+      setState(() {
+        filteredList = provider.cryptoList;
+      });
+    });
   }
 
   void _onTabTapped(int index) {
@@ -31,6 +39,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void filterSearch(String query) {
+    final cryptoProvider = Provider.of<CryptoProvider>(context, listen: false);
+    final results = cryptoProvider.cryptoList.where((coin) =>
+      coin.name.toLowerCase().contains(query.toLowerCase()) ||
+      coin.symbol.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+
+    setState(() {
+      filteredList = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final cryptoProvider = Provider.of<CryptoProvider>(context);
@@ -38,10 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(
-          "Crypto Tracker",
-          style: TextStyle(color: Colors.redAccent),
-        ),
+        title: Text("Crypto Tracker", style: TextStyle(color: Colors.redAccent)),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.redAccent,
         elevation: 0,
@@ -50,50 +67,61 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _selectedIndex == 0
           ? (cryptoProvider.isLoading
               ? Center(child: CircularProgressIndicator(color: Colors.red))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: cryptoProvider.cryptoList.length,
-                  itemBuilder: (context, index) {
-                    final crypto = cryptoProvider.cryptoList[index];
-                    return Card(
-                      color: Colors.grey[850],
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailScreen(crypto: crypto),
+              : Column(
+                  children: [
+                    SearchBarWidget(
+                      controller: searchController,
+                      onChanged: filterSearch,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: filteredList.length,
+                        itemBuilder: (context, index) {
+                          final crypto = filteredList[index];
+                          return Card(
+                            color: Colors.grey[850],
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailScreen(crypto: crypto),
+                                  ),
+                                );
+                              },
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                backgroundImage: NetworkImage(crypto.imageUrl),
+                              ),
+                              title: Text(
+                                crypto.name,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              subtitle: Text(
+                                crypto.symbol.toUpperCase(),
+                                style: TextStyle(color: Colors.redAccent),
+                              ),
+                              trailing: Text(
+                                '\$${crypto.currentPrice.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  color: Colors.greenAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           );
                         },
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: NetworkImage(crypto.imageUrl),
-                        ),
-                        title: Text(
-                          crypto.name,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        subtitle: Text(
-                          crypto.symbol.toUpperCase(),
-                          style: TextStyle(color: Colors.redAccent),
-                        ),
-                        trailing: Text(
-                          '\$${crypto.currentPrice.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            color: Colors.greenAccent,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ))
-          : SizedBox.shrink(), // Empty if not on Home
+          : SizedBox.shrink(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.grey[900],
         selectedItemColor: Colors.redAccent,
