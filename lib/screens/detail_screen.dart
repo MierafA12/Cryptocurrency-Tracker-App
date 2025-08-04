@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/crypto_model.dart';
-import 'wishlist_screen.dart'; // Make sure this screen exists and is imported
+import 'wishlist_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   final Crypto crypto;
@@ -52,6 +53,32 @@ class _DetailScreenState extends State<DetailScreen> {
     }
   }
 
+  Future<void> addToWishlist(Crypto crypto) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> existingList =
+        prefs.getStringList('wishlist') ?? [];
+
+    final cryptoJson = jsonEncode({
+      'id': crypto.id,
+      'name': crypto.name,
+      'symbol': crypto.symbol,
+      'current_price': crypto.currentPrice,
+      'image': crypto.imageUrl,
+    });
+
+    if (!existingList.contains(cryptoJson)) {
+      existingList.add(cryptoJson);
+      await prefs.setStringList('wishlist', existingList);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${crypto.name} added to wishlist')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${crypto.name} is already in wishlist')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,23 +87,9 @@ class _DetailScreenState extends State<DetailScreen> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.redAccent,
         title: Text('${widget.crypto.name} Details'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite_border),
-            tooltip: 'Wishlist',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => WishlistScreen()),
-              );
-            },
-          ),
-        ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // Go back instead of pushing again
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Padding(
@@ -118,6 +131,16 @@ class _DetailScreenState extends State<DetailScreen> {
                       fontSize: 24,
                       color: Colors.greenAccent,
                       fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    onPressed: () => addToWishlist(widget.crypto),
+                    icon: const Icon(Icons.favorite_border),
+                    label: const Text('Add to Wishlist'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
                     ),
                   ),
                 ],
