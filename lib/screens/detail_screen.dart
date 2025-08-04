@@ -1,9 +1,9 @@
-// lib/screens/detail_screen.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/crypto_model.dart';
+import 'wishlist_screen.dart'; // Make sure this screen exists and is imported
 
 class DetailScreen extends StatefulWidget {
   final Crypto crypto;
@@ -57,9 +57,27 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('${widget.crypto.name} Details'),
         backgroundColor: Colors.black,
         foregroundColor: Colors.redAccent,
+        title: Text('${widget.crypto.name} Details'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border),
+            tooltip: 'Wishlist',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WishlistScreen()),
+              );
+            },
+          ),
+        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Go back instead of pushing again
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
