@@ -44,35 +44,56 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text("My Wishlist"),
-        backgroundColor: Colors.blueGrey[900],
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.grey[900],
+        foregroundColor: Colors.redAccent,
       ),
       body: wishlist.isEmpty
-          ? const Center(child: Text("No items in your wishlist"))
+          ? const Center(
+              child: Text(
+                "No items in your wishlist",
+                style: TextStyle(color: Colors.white),
+              ),
+            )
           : ListView.builder(
+              padding: const EdgeInsets.all(12),
               itemCount: wishlist.length,
               itemBuilder: (context, index) {
                 final crypto = wishlist[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(crypto.imageUrl),
+                return Card(
+                  color: Colors.grey[850],
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  title: Text(crypto.name),
-                  subtitle: Text(crypto.symbol.toUpperCase()),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => removeFromWishlist(crypto.id),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(crypto.imageUrl),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    title: Text(
+                      crypto.name,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      crypto.symbol.toUpperCase(),
+                      style: const TextStyle(color: Colors.redAccent),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => removeFromWishlist(crypto.id),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetailScreen(crypto: crypto),
+                        ),
+                      );
+                    },
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => DetailScreen(crypto: crypto),
-                      ),
-                    );
-                  },
                 );
               },
             ),
