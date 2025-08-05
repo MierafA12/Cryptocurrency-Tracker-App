@@ -5,9 +5,9 @@ A beautiful and modern **Flutter application** that displays real-time cryptocur
 ---
 
 
-## ⚙️ Tech Stack
+##  Tech Stack
 
-### 🚀 **Frontend:**
+### **Frontend:**
 - **Flutter** — Cross-platform UI framework by Google
 - **Dart** — Programming language for Flutter
 - **Shared Preferences** — Local storage for wishlist
@@ -15,12 +15,12 @@ A beautiful and modern **Flutter application** that displays real-time cryptocur
 - **Flutter Charts / fl_chart** — To display price graphs
 
 ### 🧠 State Management:
-- ✅ Using basic `setState()` for small state updates
-- ✅ `SharedPreferences` for persistent wishlist storage  
+-  Using basic `setState()` for small state updates
+-  `SharedPreferences` for persistent wishlist storage  
 
 ---
 
-## 🧩 Features
+##  Features
 
 - 🔍 **Real-Time Crypto Prices**
 - 📊 **Interactive Detail Screen** with chart and description
@@ -30,7 +30,7 @@ A beautiful and modern **Flutter application** that displays real-time cryptocur
 - 🔎 **Search Functionality**
 - 🖼️ Beautiful UI 
 ---
-## 📱 App Preview
+##  App Preview
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
   <img src="assets/images/onbording.png" width="200" />
