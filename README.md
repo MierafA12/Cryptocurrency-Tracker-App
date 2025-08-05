@@ -1,17 +1,48 @@
-# Cryptocurrency-Tracker-App
-# cryptocurrencytruckerapp
+# 💰 Crypto Currency App
 
-A new Flutter project.
+A beautiful and modern **Flutter application** that displays real-time cryptocurrency prices, lets users view detailed charts, and manage a personalized **wishlist** using local storage. Built with a focus on clean UI, responsiveness, and performance.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## ⚙️ Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 🚀 **Frontend:**
+- **Flutter** — Cross-platform UI framework by Google
+- **Dart** — Programming language for Flutter
+- **Shared Preferences** — Local storage for wishlist
+- **HTTP** — API requests (to fetch real-time crypto data)
+- **Flutter Charts / fl_chart** — To display price graphs
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 🧠 State Management:
+- ✅ Using basic `setState()` for small state updates
+- ✅ `SharedPreferences` for persistent wishlist storage  
+
+---
+
+## 🧩 Features
+
+- 🔍 **Real-Time Crypto Prices**
+- 📊 **Interactive Detail Screen** with chart and description
+- 💙 **Wishlist Management** with local storage
+- 🧭 Smooth Navigation with `Navigator`
+- 🌐 API integration (like [CoinGecko](https://www.coingecko.com/en/api))
+- 🔎 **Search Functionality**
+- 🖼️ Beautiful UI 
+---
+
+## 🚀 Getting Started
+
+### 🔧 Prerequisites
+
+- Flutter SDK (3.x recommended)
+- Dart SDK
+- Android Studio / VS Code
+
+### 🛠️ Installation
+
+```bash
+git clone https://github.com/yourusername/crypto_flutter_app.git
+cd crypto_flutter_app
+flutter pub get
+flutter run
