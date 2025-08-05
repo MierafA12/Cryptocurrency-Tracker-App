@@ -30,6 +30,15 @@ A beautiful and modern **Flutter application** that displays real-time cryptocur
 - 🔎 **Search Functionality**
 - 🖼️ Beautiful UI 
 ---
+## 📱 App Preview
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="assets/images/onbording.png" width="200" />
+  <img src="assets/images/list.png" width="200" />
+  <img src="assets/images/detail.png" width="200" />
+  <img src="assets/images/wishlist.png" width="200" />
+</div>
+---
 
 ## 🚀 Getting Started
 
